@@ -20,6 +20,7 @@ interface Env {
   CLOUDFLARE_R2_ACCESS_KEY_ID?: string;
   CLOUDFLARE_R2_SECRET_ACCESS_KEY?: string;
   APP_URL?: string;
+  BLOG_STORE?: any;
   ASSETS: {
     fetch: (request: Request) => Promise<Response>;
   };
@@ -39,7 +40,11 @@ export default {
     if (env.TELEGRAM_GROUP_ID) process.env.TELEGRAM_GROUP_ID = env.TELEGRAM_GROUP_ID;
     if (env.APP_URL) process.env.APP_URL = env.APP_URL;
 
-    ensureTelegramDbInitialized();
+    try {
+      await ensureTelegramDbInitialized(env.BLOG_STORE);
+    } catch (e) {
+      console.error("Initialization error:", e);
+    }
 
     // CORS Headers
     const corsHeaders = {

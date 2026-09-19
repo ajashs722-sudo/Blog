@@ -81,65 +81,104 @@ export function getPrimaryGroupId(): string | number {
   return `-100${cleanId}`;
 }
 
+// Cloudflare KV Namespace reference for edge persistence across serverless isolates
+let currentKvNamespace: any = null;
+
 // In-memory store
 let postsStore: BlogPostData[] = [];
 let subscribersStore: Map<string, SubscriberData> = new Map();
 
-// Save state to disk file
-function saveToDiskStore() {
+export function setKvBinding(kv: any) {
+  if (kv) currentKvNamespace = kv;
+}
+
+// Save state to KV and disk file
+export async function saveToDiskStore() {
+  const data = {
+    posts: postsStore,
+    subscribers: Array.from(subscribersStore.values()),
+    discoveredGroupIds: Array.from(discoveredGroupIds),
+  };
+
+  // 1. Persist to Cloudflare KV for global edge sync
+  if (currentKvNamespace) {
+    try {
+      await currentKvNamespace.put("data_posts", JSON.stringify(data));
+      console.log("[KV Store] Successfully persisted blog database to Cloudflare KV!");
+    } catch (e) {
+      console.error("[KV Store] Error writing storage to Cloudflare KV:", e);
+    }
+  }
+
+  // 2. Also try writing to local disk if fs is available
   try {
-    const data = {
-      posts: postsStore,
-      subscribers: Array.from(subscribersStore.values()),
-      discoveredGroupIds: Array.from(discoveredGroupIds),
-    };
-    fs.writeFileSync(STORAGE_FILE_PATH, JSON.stringify(data, null, 2), "utf-8");
+    if (typeof fs !== "undefined" && fs && typeof fs.writeFileSync === "function") {
+      fs.writeFileSync(STORAGE_FILE_PATH, JSON.stringify(data, null, 2), "utf-8");
+    }
   } catch (e) {
-    console.error("Error writing storage to disk:", e);
+    // Expected on read-only serverless worker disk
   }
 }
 
-// Load state from disk file
-function loadFromDiskStore() {
-  try {
-    if (fs.existsSync(STORAGE_FILE_PATH)) {
-      const raw = fs.readFileSync(STORAGE_FILE_PATH, "utf-8");
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed.posts) && parsed.posts.length > 0) {
-        postsStore = parsed.posts;
-      } else {
-        // Seed initial posts from default articles if disk exists but is empty
-        postsStore = articles.map((a) => ({
-          ...a,
-          content: a.content || a.excerpt,
-          createdAt: new Date().toISOString(),
-        }));
-        saveToDiskStore();
+// Load state from KV or disk file
+export async function loadFromDiskStore() {
+  let loaded = false;
+
+  // 1. Try reading from Cloudflare KV first
+  if (currentKvNamespace) {
+    try {
+      const raw = await currentKvNamespace.get("data_posts");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.posts) && parsed.posts.length > 0) {
+          postsStore = parsed.posts;
+          loaded = true;
+        }
+        if (Array.isArray(parsed.subscribers)) {
+          subscribersStore.clear();
+          parsed.subscribers.forEach((s: SubscriberData) => {
+            if (s.telegramId) subscribersStore.set(String(s.telegramId), s);
+          });
+        }
+        if (Array.isArray(parsed.discoveredGroupIds)) {
+          parsed.discoveredGroupIds.forEach((gid: string | number) => discoveredGroupIds.add(gid));
+        }
       }
-      if (Array.isArray(parsed.subscribers)) {
-        parsed.subscribers.forEach((s: SubscriberData) => {
-          if (s.telegramId) subscribersStore.set(String(s.telegramId), s);
-        });
-      }
-      if (Array.isArray(parsed.discoveredGroupIds)) {
-        parsed.discoveredGroupIds.forEach((gid: string | number) => discoveredGroupIds.add(gid));
-      }
-    } else {
-      // Seed initial posts from default articles if disk is empty
-      postsStore = articles.map((a) => ({
-        ...a,
-        content: a.content || a.excerpt,
-        createdAt: new Date().toISOString(),
-      }));
-      saveToDiskStore();
+    } catch (e) {
+      console.error("[KV Store] Error reading storage from Cloudflare KV:", e);
     }
-  } catch (e) {
-    console.error("Error reading storage from disk:", e);
+  }
+
+  // 2. Fallback: try reading from local disk if not loaded from KV
+  if (!loaded) {
+    try {
+      if (typeof fs !== "undefined" && fs && typeof fs.existsSync === "function" && fs.existsSync(STORAGE_FILE_PATH)) {
+        const raw = fs.readFileSync(STORAGE_FILE_PATH, "utf-8");
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.posts) && parsed.posts.length > 0) {
+          postsStore = parsed.posts;
+          loaded = true;
+        }
+        if (Array.isArray(parsed.subscribers)) {
+          parsed.subscribers.forEach((s: SubscriberData) => {
+            if (s.telegramId) subscribersStore.set(String(s.telegramId), s);
+          });
+        }
+        if (Array.isArray(parsed.discoveredGroupIds)) {
+          parsed.discoveredGroupIds.forEach((gid: string | number) => discoveredGroupIds.add(gid));
+        }
+      }
+    } catch (e) {}
+  }
+
+  // 3. Initial seed if database is still empty
+  if (!loaded || postsStore.length === 0) {
     postsStore = articles.map((a) => ({
       ...a,
       content: a.content || a.excerpt,
       createdAt: new Date().toISOString(),
     }));
+    await saveToDiskStore();
   }
 }
 
@@ -222,10 +261,11 @@ export async function migrateExistingFilesToR2() {
 }
 
 let isInitialized = false;
-export function ensureTelegramDbInitialized() {
+export async function ensureTelegramDbInitialized(kv?: any) {
+  if (kv) setKvBinding(kv);
   if (isInitialized) return;
   isInitialized = true;
-  loadFromDiskStore();
+  await loadFromDiskStore();
 }
 
 // Multi-step creation session store for Admin

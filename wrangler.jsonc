@@ -12,5 +12,11 @@
   },
   "vars": {
     "APP_URL": "https://aluvantisblog.mirhamd112.workers.dev"
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "BLOG_STORE",
+      "id": "13505521e8ba401792b2443d257dc7a9"
+    }
+  ]
 }
