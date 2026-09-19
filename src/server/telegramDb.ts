@@ -38,9 +38,15 @@ export interface SubscriberData {
   telegramMessageId?: number;
 }
 
-const BOT_TOKEN = (process.env.TELEGRAM_BOT_TOKEN || "").trim();
-const ADMIN_ID = (process.env.TELEGRAM_ADMIN_ID || "").trim();
-const RAW_GROUP_ID = (process.env.TELEGRAM_GROUP_ID || "").trim();
+export function getBotToken(): string {
+  return (process.env.TELEGRAM_BOT_TOKEN || "").trim();
+}
+export function getAdminId(): string {
+  return (process.env.TELEGRAM_ADMIN_ID || "").trim();
+}
+export function getRawGroupId(): string {
+  return (process.env.TELEGRAM_GROUP_ID || "").trim();
+}
 
 const STORAGE_FILE_PATH = path.resolve(process.cwd(), "data_posts.json");
 
@@ -49,14 +55,15 @@ const discoveredGroupIds = new Set<string | number>();
 
 // Resolve group chat ID format for Telegram API (-100... or -...)
 export function getGroupChatIds(): (string | number)[] {
-  const cleanId = RAW_GROUP_ID.replace(/^-100/, "").replace(/^-/, "");
+  const rawId = getRawGroupId();
+  const cleanId = rawId.replace(/^-100/, "").replace(/^-/, "");
   const ids: (string | number)[] = [
     `-100${cleanId}`,
     Number(`-100${cleanId}`),
     `-${cleanId}`,
     Number(`-${cleanId}`),
-    RAW_GROUP_ID,
-    Number(RAW_GROUP_ID),
+    rawId,
+    Number(rawId),
   ];
 
   discoveredGroupIds.forEach((id) => {
@@ -69,7 +76,8 @@ export function getGroupChatIds(): (string | number)[] {
 }
 
 export function getPrimaryGroupId(): string | number {
-  const cleanId = RAW_GROUP_ID.replace(/^-100/, "").replace(/^-/, "");
+  const rawId = getRawGroupId();
+  const cleanId = rawId.replace(/^-100/, "").replace(/^-/, "");
   return `-100${cleanId}`;
 }
 
@@ -381,7 +389,8 @@ export function validateContent(contentText: string): ValidationResult {
 
 // Helper to call Telegram API with timeout & error resilience
 export async function callTelegramApi(method: string, body: Record<string, any>, options?: { timeoutMs?: number }) {
-  const url = `https://api.telegram.org/bot${BOT_TOKEN}/${method}`;
+  const token = getBotToken();
+  const url = `https://api.telegram.org/bot${token}/${method}`;
   const timeoutMs = options?.timeoutMs || (method === "getUpdates" ? 25000 : 15000);
 
   try {
@@ -413,7 +422,8 @@ export async function getTelegramFileUrl(fileId: string): Promise<string> {
   try {
     const res = await callTelegramApi("getFile", { file_id: fileId });
     if (res.ok && res.result?.file_path) {
-      const telegramUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${res.result.file_path}`;
+      const token = getBotToken();
+      const telegramUrl = `https://api.telegram.org/file/bot${token}/${res.result.file_path}`;
       console.log(`[R2 Sync] Transferring downloaded Telegram file ${fileId} to Cloudflare R2...`);
       const r2Url = await transferTelegramFileToR2(telegramUrl);
       if (r2Url) {
@@ -908,8 +918,8 @@ export function getSubscribersList(): SubscriberData[] {
 export async function notifyAllSubscribers(post: BlogPostData) {
   const subscribers = getSubscribersList();
   
-  const allTargetIds = new Set<string>();
-  if (ADMIN_ID) allTargetIds.add(String(ADMIN_ID));
+  const adminId = getAdminId();
+  if (adminId) allTargetIds.add(String(adminId));
   subscribers.forEach((s) => allTargetIds.add(String(s.telegramId)));
 
   const messageText = `📢 *YANGI BLOG MAQOLASI CHOP ETILDI!* 📰\n\n` +
@@ -967,8 +977,8 @@ export function getSystemStats() {
   return {
     totalPosts: postsStore.length,
     totalSubscribers: subscribersStore.size,
-    telegramGroupId: RAW_GROUP_ID,
-    adminId: ADMIN_ID,
+    telegramGroupId: getRawGroupId(),
+    adminId: getAdminId(),
     discoveredGroups: Array.from(discoveredGroupIds),
     status: "Active & Connected to Telegram Group Storage",
   };
