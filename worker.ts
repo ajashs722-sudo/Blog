@@ -163,9 +163,8 @@ export default {
         if (url.pathname === '/api/telegram/webhook') {
           if (request.method === 'POST') {
             try {
-              const update = await request.json();
-              const validated = TelegramUpdateSchema.parse(update);
-              ctx.waitUntil(handleTelegramWebhookUpdate(validated));
+              const update: any = await request.json();
+              ctx.waitUntil(handleTelegramWebhookUpdate(update));
             } catch (err: any) {
               console.warn('Telegram webhook payload error:', err?.message || err);
             }

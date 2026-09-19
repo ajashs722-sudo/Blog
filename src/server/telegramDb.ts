@@ -47,6 +47,10 @@ export function getAdminId(): string {
 export function getRawGroupId(): string {
   return (process.env.TELEGRAM_GROUP_ID || "").trim();
 }
+export function getAppUrl(): string {
+  const url = (process.env.APP_URL || "https://blog.aluvantis.uz").trim();
+  return url.endsWith("/") ? url.slice(0, -1) : url;
+}
 
 const STORAGE_FILE_PATH = path.resolve(process.cwd(), "data_posts.json");
 
@@ -569,15 +573,29 @@ export function getUserReplyKeyboard() {
   };
 }
 
-// Format blog post as JSON string for Telegram storage
+// Format blog post for Telegram storage & beautiful human display in group
 export function encodePostForTelegram(post: BlogPostData): string {
-  return `📦 [BLOG_POST_JSON]\n${JSON.stringify(post, null, 2)}`;
+  const cleanJson = JSON.stringify(post);
+  return `📌 *${post.title}*\n\n` +
+    `${post.excerpt}\n\n` +
+    `✍️ Muallif: ${post.author?.name || "Anvar"}\n` +
+    `⏱️ ${post.readTime || "5 min"} · 📅 ${post.date}\n\n` +
+    `🔗 [Veb-saytda o'qish](${getAppUrl()}/post/${post.slug})\n\n` +
+    `📦 [BLOG_POST_JSON:${cleanJson}]`;
 }
 
 // Decode blog post from Telegram message text/caption
 export function decodePostFromTelegram(text: string): BlogPostData | null {
   try {
     if (!text) return null;
+    if (text.includes("[BLOG_POST_JSON:")) {
+      const parts = text.split("[BLOG_POST_JSON:");
+      if (parts[1]) {
+        let jsonStr = parts[1].trim();
+        if (jsonStr.endsWith("]")) jsonStr = jsonStr.slice(0, -1);
+        return JSON.parse(jsonStr);
+      }
+    }
     if (text.includes("[BLOG_POST_JSON]")) {
       const jsonStr = text.split("[BLOG_POST_JSON]")[1]?.trim();
       if (jsonStr) return JSON.parse(jsonStr);
@@ -846,7 +864,7 @@ export function getPaginatedPostsKeyboard(page: number, isAdmin: boolean) {
     text += `*${globalIndex}. ${post.title}*\nID: \`${post.id}\` | Sana: ${post.date}\n\n`;
 
     const row: any[] = [
-      { text: `📖 O'qish (${globalIndex})`, url: `https://ais-dev-xjk5qu7on27um4tz7336xw-346726697265.asia-southeast1.run.app/post/${post.slug}` }
+      { text: `📖 O'qish (${globalIndex})`, url: `${getAppUrl()}/post/${post.slug}` }
     ];
     if (isAdmin) {
       row.push({ text: `✏️ Tahrirlash`, callback_data: `edit_post_sel_${post.id}` });
@@ -972,7 +990,7 @@ export async function notifyAllSubscribers(post: BlogPostData) {
   const inlineKeyboard = {
     inline_keyboard: [
       [
-        { text: "📖 Veb-saytda o'qish", url: `https://ais-dev-xjk5qu7on27um4tz7336xw-346726697265.asia-southeast1.run.app/post/${post.slug}` }
+        { text: "📖 Veb-saytda o'qish", url: `${getAppUrl()}/post/${post.slug}` }
       ]
     ]
   };
@@ -1248,6 +1266,76 @@ export async function handleTelegramWebhookUpdate(update: any) {
     saveToDiskStore();
   }
 
+  // 3. Handle messages posted directly into Telegram Group / Channel as NoSQL DB items
+  const isGroupChat = message.chat?.type === "group" || message.chat?.type === "supergroup" || message.chat?.type === "channel" || chatId.startsWith("-");
+  const isFromBot = Boolean(message.from?.is_bot);
+
+  if (isGroupChat && !decodedPost && !decodedSub && !isFromBot && !rawText.startsWith("/")) {
+    const isEdited = Boolean(update.edited_message || update.edited_channel_post);
+
+    if (isEdited) {
+      const existingIdx = postsStore.findIndex((p) => p.telegramMessageId === message.message_id);
+      if (existingIdx >= 0) {
+        const postToEdit = postsStore[existingIdx];
+        if (rawText) {
+          const lines = rawText.split("\n").filter((l: string) => l.trim().length > 0);
+          postToEdit.title = lines[0] || postToEdit.title;
+          if (lines.length > 1) {
+            postToEdit.excerpt = lines.slice(1).join("\n").substring(0, 300);
+            postToEdit.content = lines.slice(1).join("\n");
+          }
+        }
+        postToEdit.updatedAt = new Date().toISOString();
+        postsStore[existingIdx] = postToEdit;
+        saveToDiskStore();
+      }
+    } else {
+      if (rawText || message.photo || message.video) {
+        let coverImg = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&auto=format&fit=crop";
+        let vidUrl = "";
+
+        if (message.photo && message.photo.length > 0) {
+          const largestPhoto = message.photo[message.photo.length - 1];
+          coverImg = await getTelegramFileUrl(largestPhoto.file_id);
+        } else if (message.video) {
+          vidUrl = await getTelegramFileUrl(message.video.file_id);
+          const thumbId = message.video.thumbnail?.file_id || message.video.thumb?.file_id;
+          if (thumbId) coverImg = await getTelegramFileUrl(thumbId);
+        }
+
+        const lines = (rawText || "Yangi Telegram Post").split("\n").filter((l: string) => l.trim().length > 0);
+        const postTitle = lines[0] || "Yangi Telegram Post";
+        const bodyText = lines.length > 1 ? lines.slice(1).join("\n") : postTitle;
+
+        const newGroupPost: BlogPostData = {
+          id: `post_tg_${message.message_id}`,
+          slug: `tg-post-${message.message_id}`,
+          title: postTitle,
+          excerpt: bodyText.substring(0, 250),
+          content: bodyText,
+          coverImage: coverImg,
+          videoUrl: vidUrl,
+          date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+          readTime: `${Math.max(1, Math.ceil(bodyText.length / 800))} min read`,
+          tags: ["Telegram", "News"],
+          author: defaultAuthor,
+          telegramMessageId: message.message_id,
+          isDeleted: false,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+
+        const existingIdx = postsStore.findIndex((p) => p.telegramMessageId === message.message_id);
+        if (existingIdx >= 0) {
+          postsStore[existingIdx] = newGroupPost;
+        } else {
+          postsStore.unshift(newGroupPost);
+        }
+        saveToDiskStore();
+      }
+    }
+  }
+
   // Handle Quick Keyboard Button Texts mapping
   let text = rawText;
   if (text === "📚 Barcha Maqolalar" || text === "📚 Maqolalar") text = "/posts";
@@ -1260,7 +1348,7 @@ export async function handleTelegramWebhookUpdate(update: any) {
   if (text === "🌐 Veb-saytga O'tish") {
     await callTelegramApi("sendMessage", {
       chat_id: chatId,
-      text: `🌐 *Anvar Blog Veb-sayti:*\nhttps://ais-dev-xjk5qu7on27um4tz7336xw-346726697265.asia-southeast1.run.app`,
+      text: `🌐 *Anvar Blog Veb-sayti:*\n${getAppUrl()}`,
       parse_mode: "Markdown",
       reply_markup: isAdmin ? getAdminReplyKeyboard() : getUserReplyKeyboard(),
     });
@@ -1922,7 +2010,7 @@ export async function handleTelegramWebhookUpdate(update: any) {
           `• Total Obunachilar: *${stats.totalSubscribers} ta*\n` +
           `• Telegram Guruh Baza ID: \`${stats.telegramGroupId}\`\n` +
           `• Baza Holati: ✅ *Aktiv va Telegram Baza Bilan Bog'langan*\n` +
-          `• Server Linki: https://ais-dev-xjk5qu7on27um4tz7336xw-346726697265.asia-southeast1.run.app`,
+          `• Server Linki: ${getAppUrl()}`,
         parse_mode: "Markdown",
         reply_markup: isAdmin ? getAdminReplyKeyboard() : getUserReplyKeyboard(),
       });
@@ -2029,7 +2117,7 @@ export async function handleTelegramWebhookUpdate(update: any) {
         const inlineKeyboard = {
           inline_keyboard: [
             [
-              { text: "📖 Veb-saytda o'qish", url: `https://ais-dev-xjk5qu7on27um4tz7336xw-346726697265.asia-southeast1.run.app/post/${latest.slug}` }
+              { text: "📖 Veb-saytda o'qish", url: `${getAppUrl()}/post/${latest.slug}` }
             ],
             isAdmin ? [{ text: "🗑 Maqolani O'chirish", callback_data: `delete_post_${latest.id}` }] : []
           ].filter((row) => row.length > 0)
