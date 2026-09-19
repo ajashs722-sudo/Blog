@@ -14,7 +14,7 @@
 ## 🌟 Key Features
 
 * **⚡ Ultra-fast Edge Architecture:** Powered by Cloudflare Workers edge runtime and Cloudflare KV (`BLOG_STORE`) for instantaneous globally distributed data access.
-* **📦 Cloudflare R2 Media Storage:** S3-compatible media asset storage (`aluvantisblog-media`) for seamless file and image uploads.
+* **📦 Cloudflare R2 Media Storage:** S3-compatible media asset storage for seamless file and image uploads.
 * **📲 Telegram Bot & Admin Integration:** Real-time post synchronization, Telegram group auto-posting, and admin notification system.
 * **🎨 Modern UI/UX:** Styled using Tailwind CSS v4 and fluid animations powered by Motion (Framer Motion).
 * **🌐 Dynamic API & Edge Routes:** Built-in REST endpoints for posts, media uploads, health checks, and Telegram webhooks.
@@ -40,15 +40,15 @@ Create a `.env` file in the root directory (or configure via Cloudflare Wrangler
 
 ```env
 # Cloudflare R2 Configuration
-CLOUDFLARE_R2_BUCKET_NAME=aluvantisblog-media
-CLOUDFLARE_R2_ACCOUNT_ID=6c3f2b064225f58edeaf288dbe4b43ca
-CLOUDFLARE_R2_ACCESS_KEY_ID=your_access_key_id
-CLOUDFLARE_R2_SECRET_ACCESS_KEY=your_secret_access_key
+CLOUDFLARE_R2_BUCKET_NAME=your_r2_bucket_name_here
+CLOUDFLARE_R2_ACCOUNT_ID=your_cloudflare_account_id_here
+CLOUDFLARE_R2_ACCESS_KEY_ID=your_access_key_id_here
+CLOUDFLARE_R2_SECRET_ACCESS_KEY=your_secret_access_key_here
 
 # Telegram Integration
-TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-TELEGRAM_ADMIN_ID=8720233457
-TELEGRAM_GROUP_ID=-5449836481
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
+TELEGRAM_ADMIN_ID=your_telegram_admin_id_here
+TELEGRAM_GROUP_ID=your_telegram_group_id_here
 
 # App URL
 APP_URL=https://blog.aluvantis.uz
@@ -85,7 +85,7 @@ npx wrangler deploy
 
 ### ⚙️ Asosiy Imkoniyatlar:
 1. **Cloudflare KV (`BLOG_STORE`):** Maqolalarni global chekka serverlarda saqlaydi va tezkor yuklanishni ta'minlaydi.
-2. **Cloudflare R2 Media:** Rasm va fayllarni bulutli saqlash (`aluvantisblog-media`).
+2. **Cloudflare R2 Media:** Rasm va fayllarni bulutli saqlash.
 3. **Telegram Bot Integratsiyasi:** Yangi blog postlarni Telegram guruhiga va admin boti orqali avtomatik yuborish.
 4. **Moslashuvchan interfeys:** Tailwind CSS v4 va React 19 yordamida yaratilgan chiroyli dizayn.
 
