@@ -10,8 +10,12 @@
     "directory": "./dist",
     "binding": "ASSETS"
   },
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "blog.aluvantis.uz", "custom_domain": true }
+  ],
   "vars": {
-    "APP_URL": "https://aluvantisblog.mirhamd112.workers.dev"
+    "APP_URL": "https://blog.aluvantis.uz"
   },
   "kv_namespaces": [
     {
