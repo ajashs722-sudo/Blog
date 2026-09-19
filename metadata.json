@@ -1,0 +1,8 @@
+{
+  "name": "Aluvantis — Biznes va Innovatsiyalar",
+  "description": "Aluvantis korporativ tahlil va raqamli innovatsiyalar portali. CEO Anvar boshchiligida raqamli transformatsiya va biznes strategiyalari.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
