@@ -48,7 +48,7 @@ function loadPostsFromDisk(): any[] {
 }
 
 export function generateSeoFiles() {
-  console.log("Generating static SEO files (sitemap.xml, robots.txt, feed.xml, rss.xml, llms.txt)...");
+  console.log("Generating static SEO files (sitemap.xml, robots.txt, feed.xml, rss.xml, llms.txt, _redirects, vercel.json)...");
 
   const posts = loadPostsFromDisk();
 
@@ -287,6 +287,40 @@ export function generateSeoFiles() {
     llmsTxt += `- **Xulosa**: ${post.excerpt || (post.content || "").substring(0, 160)}\n\n`;
   }
 
+  // 5. Generate _redirects for Cloudflare Pages & Netlify SPA routing
+  const redirectsContent = `/sitemap.xml  /sitemap.xml  200
+/robots.txt   /robots.txt   200
+/feed.xml     /feed.xml     200
+/rss.xml      /rss.xml      200
+/llms.txt     /llms.txt     200
+/*            /index.html   200\n`;
+
+  // 6. Generate vercel.json for Vercel SPA routing
+  const vercelJsonContent = JSON.stringify(
+    {
+      rewrites: [
+        { source: "/sitemap.xml", destination: "/sitemap.xml" },
+        { source: "/robots.txt", destination: "/robots.txt" },
+        { source: "/feed.xml", destination: "/feed.xml" },
+        { source: "/rss.xml", destination: "/rss.xml" },
+        { source: "/llms.txt", destination: "/llms.txt" },
+        { source: "/(.*)", destination: "/index.html" },
+      ],
+    },
+    null,
+    2
+  );
+
+  // 7. Generate .htaccess for Apache / cPanel hosting
+  const htaccessContent = `<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>\n`;
+
   // Target directories to write files
   const targetDirs = [
     path.resolve(process.cwd(), "public"),
@@ -303,8 +337,11 @@ export function generateSeoFiles() {
     fs.writeFileSync(path.join(dir, "feed.xml"), rss, "utf-8");
     fs.writeFileSync(path.join(dir, "rss.xml"), rss, "utf-8");
     fs.writeFileSync(path.join(dir, "llms.txt"), llmsTxt, "utf-8");
+    fs.writeFileSync(path.join(dir, "_redirects"), redirectsContent, "utf-8");
+    fs.writeFileSync(path.join(dir, "vercel.json"), vercelJsonContent, "utf-8");
+    fs.writeFileSync(path.join(dir, ".htaccess"), htaccessContent, "utf-8");
 
-    console.log(`✓ Generated sitemap.xml, robots.txt, feed.xml, rss.xml, llms.txt in ${dir}`);
+    console.log(`✓ Generated sitemap.xml, robots.txt, feed.xml, rss.xml, llms.txt, _redirects, vercel.json, .htaccess in ${dir}`);
   }
 }
 
