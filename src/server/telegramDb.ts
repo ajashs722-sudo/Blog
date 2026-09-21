@@ -122,6 +122,12 @@ export async function saveToDiskStore() {
   } catch (e) {
     // Expected on read-only serverless worker disk
   }
+
+  // 3. Automatically regenerate sitemap.xml, robots.txt, feed.xml, llms.txt in real-time on any post create/update/delete
+  try {
+    const { generateSeoFiles } = await import("../../scripts/generate-seo");
+    generateSeoFiles();
+  } catch (e) {}
 }
 
 // Load state from KV or disk file
