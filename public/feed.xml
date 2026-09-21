@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" 
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+  xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+  xmlns:media="http://search.yahoo.com/mrss/"
+>
+  <channel>
+    <title>Aluvantis — Biznes va Innovatsiyalar</title>
+    <atom:link href="https://blog.aluvantis.uz/feed.xml" rel="self" type="application/rss+xml" />
+    <link>https://blog.aluvantis.uz</link>
+    <description>Aluvantis korporativ tahlil va raqamli innovatsiyalar portali. CEO Anvar boshchiligida raqamli transformatsiya va biznes strategiyalari.</description>
+    <language>uz</language>
+    <lastBuildDate>Mon, 21 Sep 2026 07:42:46 GMT</lastBuildDate>
+    <sy:updatePeriod>hourly</sy:updatePeriod>
+    <sy:updateFrequency>1</sy:updateFrequency>
+    <image>
+      <url>https://blog.aluvantis.uz/logo.png</url>
+      <title>Aluvantis</title>
+      <link>https://blog.aluvantis.uz</link>
+      <width>512</width>
+      <height>512</height>
+    </image>
+    <item>
+      <title><![CDATA[Aluvantis Rivojlanish Strategiyasi: Raqamli Kelajak Sari Qadam]]></title>
+      <link>https://blog.aluvantis.uz/post/aluvantis-strategiyasi-2026</link>
+      <guid isPermaLink="true">https://blog.aluvantis.uz/post/aluvantis-strategiyasi-2026</guid>
+      <pubDate>Mon, 21 Sep 2026 07:42:46 GMT</pubDate>
+      <dc:creator><![CDATA[Anvar]]></dc:creator>
+      <description><![CDATA[Zamonaviy raqamli bozorda kompaniyalarni texnologik transformatsiya qilish, samaradorlikni oshirish va Aluvantis-ning 2026-yildagi global rejalari.]]></description>
+      <content:encoded><![CDATA[<p><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&h=630&fit=crop" alt="Aluvantis Rivojlanish Strategiyasi: Raqamli Kelajak Sari Qadam" /></p>
+<p>Bugungi kunda har bir biznes muvaffaqiyati uning texnologiyaga qanchalik tez moslashishiga bog&apos;liq. Aluvantis sifatida biz mijozlarimizga va hamkorlarimizga eng ilg&apos;or raqamli yechimlarni taqdim etishda davom etamiz.</p>
+<p>Kompaniyamizning 2026-yildagi strategiyasi sun&apos;iy intellekt, katta hajmdagi ma&apos;lumotlar (Big Data) tahlili va bulutli infratuzilmalarni biznes jarayonlariga integratsiya qilishga qaratilgan. Ushbu maqolamizda an&apos;anaviy biznes modellarini qanday qilib yuqori rentabelli raqamli ekotizimga aylantirish sirlarini tahlil qilamiz.</p>]]></content:encoded>
+      <enclosure url="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&h=630&fit=crop" length="0" type="image/jpeg" />
+      <media:content url="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&h=630&fit=crop" medium="image" type="image/jpeg" />
+    </item>
+    <item>
+      <title><![CDATA[Biznesda Sun'iy Intellekt: Yangi Davr Integratsiyasi va Tahlil]]></title>
+      <link>https://blog.aluvantis.uz/post/ai-biznesda-samaradorlik</link>
+      <guid isPermaLink="true">https://blog.aluvantis.uz/post/ai-biznesda-samaradorlik</guid>
+      <pubDate>Mon, 21 Sep 2026 07:42:46 GMT</pubDate>
+      <dc:creator><![CDATA[Anvar]]></dc:creator>
+      <description><![CDATA[AI texnologiyalari orqali operatsion xarajatlarni qisqartirish, qaror qabul qilish tezligini oshirish va mijozlarga xizmat ko'rsatishni avtomatlashtirish.]]></description>
+      <content:encoded><![CDATA[<p><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&h=630&fit=crop" alt="Biznesda Sun&apos;iy Intellekt: Yangi Davr Integratsiyasi va Tahlil" /></p>
+<p>Sun&apos;iy intellekt endilikda shunchaki trend emas, balki biznes omon qolishining muhim shartidir. AI vositalari yordamida korporatsiyalar katta hajmdagi ma&apos;lumotlarni daqiqalar ichida qayta ishlab, kelajakdagi bozor tendensiyalarini bashorat qilmoqdalar.</p>
+<p>Aluvantis tahlilchilarining fikriga ko&apos;ra, AIdan to&apos;g&apos;ri foydalanish operatsion samaradorlikni kamida 35% ga oshiradi. Maqolada korporativ boshqaruvda sun&apos;iy intellekt agentlarini qanday qilib joriy qilish va xodimlarning intellektual salohiyatini oshirish usullari yoritilgan.</p>]]></content:encoded>
+      <enclosure url="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&h=630&fit=crop" length="0" type="image/jpeg" />
+      <media:content url="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&h=630&fit=crop" medium="image" type="image/jpeg" />
+    </item>
+    <item>
+      <title><![CDATA[Investitsiya va Innovatsiyalar: Zamonaviy Bozorda Muvaffaqiyat]]></title>
+      <link>https://blog.aluvantis.uz/post/investitsiya-va-innovatsiyalar-bozori</link>
+      <guid isPermaLink="true">https://blog.aluvantis.uz/post/investitsiya-va-innovatsiyalar-bozori</guid>
+      <pubDate>Mon, 21 Sep 2026 07:42:46 GMT</pubDate>
+      <dc:creator><![CDATA[Anvar]]></dc:creator>
+      <description><![CDATA[Istiqbolli startaplar va yuqori texnologiyali loyihalarga investitsiya kiritish tendensiyalari, venchur kapitali va Aluvantis investitsiya yo'nalishlari.]]></description>
+      <content:encoded><![CDATA[<p><img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=1200&h=630&fit=crop" alt="Investitsiya va Innovatsiyalar: Zamonaviy Bozorda Muvaffaqiyat" /></p>
+<p>Raqobatbardosh bo&apos;lib qolish uchun kompaniyalar doimiy ravishda innovatsiyalarga sarmoya kiritishlari kerak. Moliya bozoridagi so&apos;nggi o&apos;zgarishlar shuni ko&apos;rsatadiki, sarmoyadorlar faqat barqaror va raqamli asosga ega bo&apos;lgan loyihalarni afzal ko&apos;rmoqdalar.</p>
+<p>Aluvantis investitsiya portfeli har doim kelajak texnologiyalariga yo&apos;naltirilgan. Ushbu maqolada global venchur bozori, texnologik loyihalarni baholash mezonlari va Aluvantis taklif etayotgan moliyaviy yechimlar haqida batafsil ma&apos;lumot beriladi.</p>]]></content:encoded>
+      <enclosure url="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=1200&h=630&fit=crop" length="0" type="image/jpeg" />
+      <media:content url="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=1200&h=630&fit=crop" medium="image" type="image/jpeg" />
+    </item>
+  </channel>
+</rss>

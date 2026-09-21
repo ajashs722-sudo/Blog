@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
+import { generateSeoFiles } from "./scripts/generate-seo";
 import { articles, defaultAuthor } from "./src/data/articles";
 import {
   getAllPostsFromStore,
@@ -466,6 +467,13 @@ async function startServer() {
   const app = express();
   const isProd = process.env.NODE_ENV === "production";
 
+  // Generate static SEO files (sitemap.xml, robots.txt, feed.xml) into public/ and dist/
+  try {
+    generateSeoFiles();
+  } catch (e) {
+    console.error("[SEO Build] Error generating static SEO files:", e);
+  }
+
   app.use(express.json());
 
   // API or health check routes
@@ -673,7 +681,7 @@ async function startServer() {
   });
 
   // Dynamic Sitemap XML Route for Search Engines (Google, Yandex, Bing) with Image and Video extensions
-  app.get("/sitemap.xml", (req, res) => {
+  app.get(["/sitemap.xml", "/sitemap", "/sitemap_index.xml", "/sitemap-index.xml"], (req, res) => {
     try {
       const posts = getAllPostsFromStore();
       const protocol = (req.headers["x-forwarded-proto"] || req.protocol || "https") as string;
@@ -812,7 +820,7 @@ async function startServer() {
   });
 
   // Dynamic Robots.txt Route for Bot Controls & 2026 AI/GEO Crawlers
-  app.get("/robots.txt", (req, res) => {
+  app.get(["/robots.txt", "/robot.txt"], (req, res) => {
     try {
       const protocol = (req.headers["x-forwarded-proto"] || req.protocol || "https") as string;
       const host = (req.headers["x-forwarded-host"] || req.get("host") || "localhost:3000") as string;

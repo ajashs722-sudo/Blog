@@ -510,7 +510,7 @@ export async function registerBotCommands() {
 
   // 2. Set admin-specific commands for Anvar (main admin)
   try {
-    const adminId = String(process.env.TELEGRAM_ADMIN_ID || ADMIN_ID || "").trim();
+    const adminId = getAdminId();
     if (adminId) {
       const adminChatId = parseInt(adminId, 10);
       if (!isNaN(adminChatId)) {
@@ -530,7 +530,7 @@ export async function registerBotCommands() {
 export function isAdminUser(uId: string, cId: string): boolean {
   const cleanUid = String(uId || "").trim();
   const cleanCid = String(cId || "").trim();
-  const targetAdmin = String(process.env.TELEGRAM_ADMIN_ID || ADMIN_ID || "").trim();
+  const targetAdmin = getAdminId();
   if (!targetAdmin) return false;
   return cleanUid === targetAdmin || cleanCid === targetAdmin;
 }
@@ -828,9 +828,24 @@ export function getAllPostsFromStore(includeDeleted = false): BlogPostData[] {
   return postsStore.filter((p) => !p.isDeleted);
 }
 
-// Get single post by slug or ID (ignores soft-deleted unless explicitly requested)
 export function getPostBySlugFromStore(slugOrId: string, includeDeleted = false): BlogPostData | undefined {
-  return postsStore.find((p) => (p.slug === slugOrId || p.id === slugOrId) && (includeDeleted || !p.isDeleted));
+  if (!slugOrId) return undefined;
+  let decoded = slugOrId;
+  try {
+    decoded = decodeURIComponent(slugOrId);
+  } catch (e) {}
+
+  const target = decoded.trim().toLowerCase();
+  return postsStore.find((p) => {
+    if (!includeDeleted && p.isDeleted) return false;
+    const pSlug = (p.slug || "").trim().toLowerCase();
+    const pId = String(p.id || "").trim().toLowerCase();
+    let pSlugDecoded = pSlug;
+    try {
+      pSlugDecoded = decodeURIComponent(pSlug);
+    } catch (e) {}
+    return pSlug === target || pSlugDecoded === target || pId === target;
+  });
 }
 
 // Helper to generate a paginated post list message and inline keyboard

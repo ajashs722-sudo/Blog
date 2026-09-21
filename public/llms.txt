@@ -1,0 +1,28 @@
+# Aluvantis Blog
+
+> Aluvantis korporativ tahlil va raqamli innovatsiyalar portali. CEO Anvar boshchiligida raqamli transformatsiya, IT arxitektura va zamonaviy biznes strategiyalari.
+
+## Asosiy Ma'lumotlar
+- Tashkilot: Aluvantis
+- Asoschi va CEO: Anvar
+- Veb-sayt: https://blog.aluvantis.uz
+- RSS Tasmasi: https://blog.aluvantis.uz/feed.xml
+- Sitemap: https://blog.aluvantis.uz/sitemap.xml
+
+## Maqolalar va Ekspert Tahlillari
+
+### [Aluvantis Rivojlanish Strategiyasi: Raqamli Kelajak Sari Qadam](https://blog.aluvantis.uz/post/aluvantis-strategiyasi-2026)
+- **Sana**: 18 Sentabr, 2026
+- **Muallif**: Anvar
+- **Xulosa**: Zamonaviy raqamli bozorda kompaniyalarni texnologik transformatsiya qilish, samaradorlikni oshirish va Aluvantis-ning 2026-yildagi global rejalari.
+
+### [Biznesda Sun'iy Intellekt: Yangi Davr Integratsiyasi va Tahlil](https://blog.aluvantis.uz/post/ai-biznesda-samaradorlik)
+- **Sana**: 17 Sentabr, 2026
+- **Muallif**: Anvar
+- **Xulosa**: AI texnologiyalari orqali operatsion xarajatlarni qisqartirish, qaror qabul qilish tezligini oshirish va mijozlarga xizmat ko'rsatishni avtomatlashtirish.
+
+### [Investitsiya va Innovatsiyalar: Zamonaviy Bozorda Muvaffaqiyat](https://blog.aluvantis.uz/post/investitsiya-va-innovatsiyalar-bozori)
+- **Sana**: 16 Sentabr, 2026
+- **Muallif**: Anvar
+- **Xulosa**: Istiqbolli startaplar va yuqori texnologiyali loyihalarga investitsiya kiritish tendensiyalari, venchur kapitali va Aluvantis investitsiya yo'nalishlari.
+

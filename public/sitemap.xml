@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset 
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+  xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+  <url>
+    <loc>https://blog.aluvantis.uz/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://blog.aluvantis.uz/logo.png</image:loc>
+      <image:title>Aluvantis Logotip</image:title>
+      <image:caption>Aluvantis korporativ tahlil va raqamli innovatsiyalar portali</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&h=630&fit=crop</image:loc>
+      <image:title>Aluvantis Rivojlanish Strategiyasi: Raqamli Kelajak Sari Qadam</image:title>
+      <image:caption>Zamonaviy raqamli bozorda kompaniyalarni texnologik transformatsiya qilish, samaradorlikni oshirish va Aluvantis-ning 2026-yildagi global rejalari.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&h=630&fit=crop</image:loc>
+      <image:title>Biznesda Sun&apos;iy Intellekt: Yangi Davr Integratsiyasi va Tahlil</image:title>
+      <image:caption>AI texnologiyalari orqali operatsion xarajatlarni qisqartirish, qaror qabul qilish tezligini oshirish va mijozlarga xizmat ko&apos;rsatishni avtomatlashtirish.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=1200&h=630&fit=crop</image:loc>
+      <image:title>Investitsiya va Innovatsiyalar: Zamonaviy Bozorda Muvaffaqiyat</image:title>
+      <image:caption>Istiqbolli startaplar va yuqori texnologiyali loyihalarga investitsiya kiritish tendensiyalari, venchur kapitali va Aluvantis investitsiya yo&apos;nalishlari.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.aluvantis.uz/about</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.aluvantis.uz/author.png</image:loc>
+      <image:title>Anvar — CEO Aluvantis</image:title>
+      <image:caption>Aluvantis kompaniyasi asoschisi va bosh direktori (CEO) Anvar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.aluvantis.uz/photography</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&h=630&fit=crop</image:loc>
+      <image:title>Aluvantis Rivojlanish Strategiyasi: Raqamli Kelajak Sari Qadam</image:title>
+      <image:caption>Zamonaviy raqamli bozorda kompaniyalarni texnologik transformatsiya qilish, samaradorlikni oshirish va Aluvantis-ning 2026-yildagi global rejalari.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&h=630&fit=crop</image:loc>
+      <image:title>Biznesda Sun&apos;iy Intellekt: Yangi Davr Integratsiyasi va Tahlil</image:title>
+      <image:caption>AI texnologiyalari orqali operatsion xarajatlarni qisqartirish, qaror qabul qilish tezligini oshirish va mijozlarga xizmat ko&apos;rsatishni avtomatlashtirish.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=1200&h=630&fit=crop</image:loc>
+      <image:title>Investitsiya va Innovatsiyalar: Zamonaviy Bozorda Muvaffaqiyat</image:title>
+      <image:caption>Istiqbolli startaplar va yuqori texnologiyali loyihalarga investitsiya kiritish tendensiyalari, venchur kapitali va Aluvantis investitsiya yo&apos;nalishlari.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.aluvantis.uz/post/aluvantis-strategiyasi-2026</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&h=630&fit=crop</image:loc>
+      <image:title>Aluvantis Rivojlanish Strategiyasi: Raqamli Kelajak Sari Qadam</image:title>
+      <image:caption>Zamonaviy raqamli bozorda kompaniyalarni texnologik transformatsiya qilish, samaradorlikni oshirish va Aluvantis-ning 2026-yildagi global rejalari.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.aluvantis.uz/post/ai-biznesda-samaradorlik</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&h=630&fit=crop</image:loc>
+      <image:title>Biznesda Sun&apos;iy Intellekt: Yangi Davr Integratsiyasi va Tahlil</image:title>
+      <image:caption>AI texnologiyalari orqali operatsion xarajatlarni qisqartirish, qaror qabul qilish tezligini oshirish va mijozlarga xizmat ko&apos;rsatishni avtomatlashtirish.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.aluvantis.uz/post/investitsiya-va-innovatsiyalar-bozori</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=1200&h=630&fit=crop</image:loc>
+      <image:title>Investitsiya va Innovatsiyalar: Zamonaviy Bozorda Muvaffaqiyat</image:title>
+      <image:caption>Istiqbolli startaplar va yuqori texnologiyali loyihalarga investitsiya kiritish tendensiyalari, venchur kapitali va Aluvantis investitsiya yo&apos;nalishlari.</image:caption>
+    </image:image>
+  </url>
+</urlset>
