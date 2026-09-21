@@ -288,12 +288,7 @@ export function generateSeoFiles() {
   }
 
   // 5. Generate _redirects for Cloudflare Pages & Netlify SPA routing
-  const redirectsContent = `/sitemap.xml  /sitemap.xml  200
-/robots.txt   /robots.txt   200
-/feed.xml     /feed.xml     200
-/rss.xml      /rss.xml      200
-/llms.txt     /llms.txt     200
-/*            /index.html   200\n`;
+  const redirectsContent = `/*            /index.html   200\n`;
 
   // 6. Generate vercel.json for Vercel SPA routing
   const vercelJsonContent = JSON.stringify(
