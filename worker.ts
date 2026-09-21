@@ -182,6 +182,98 @@ export default {
       }
     }
 
+    // Dynamic Sitemap (/sitemap.xml, /sitemap)
+    if (url.pathname === '/sitemap.xml' || url.pathname === '/sitemap') {
+      const posts = getAllPostsFromStore();
+      const baseUrl = env.APP_URL || url.origin;
+      const today = new Date().toISOString().split('T')[0];
+
+      let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+      xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">\n`;
+      
+      xml += `  <url>\n    <loc>${baseUrl}/</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
+      xml += `  <url>\n    <loc>${baseUrl}/about</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+      xml += `  <url>\n    <loc>${baseUrl}/photography</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
+
+      const escapeXml = (unsafe: string) => unsafe ? unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;") : "";
+
+      for (const p of posts) {
+        if (p.isDeleted) continue;
+        const postUrl = `${baseUrl}/post/${p.slug}`;
+        const lastMod = (p.updatedAt || p.createdAt || p.date ? new Date(p.updatedAt || p.createdAt || p.date).toISOString() : new Date().toISOString()).split('T')[0];
+        xml += `  <url>\n`;
+        xml += `    <loc>${postUrl}</loc>\n`;
+        xml += `    <lastmod>${lastMod}</lastmod>\n`;
+        xml += `    <changefreq>weekly</changefreq>\n`;
+        xml += `    <priority>0.9</priority>\n`;
+        if (p.coverImage) {
+          const imgUrl = p.coverImage.startsWith('http') ? p.coverImage : `${baseUrl}${p.coverImage}`;
+          xml += `    <image:image>\n`;
+          xml += `      <image:loc>${imgUrl}</image:loc>\n`;
+          xml += `      <image:title>${escapeXml(p.title)}</image:title>\n`;
+          xml += `    </image:image>\n`;
+        }
+        xml += `  </url>\n`;
+      }
+      xml += `</urlset>`;
+
+      return new Response(xml, {
+        headers: { 'Content-Type': 'application/xml; charset=utf-8', ...corsHeaders },
+      });
+    }
+
+    // Dynamic Robots.txt (/robots.txt)
+    if (url.pathname === '/robots.txt') {
+      const baseUrl = env.APP_URL || url.origin;
+      let txt = `# Aluvantis Blog Robots.txt - Dynamic Cloudflare Worker Response\n`;
+      txt += `User-agent: *\nAllow: /\nDisallow: /api/\nAllow: /api/posts\nAllow: /api/media/\n\n`;
+
+      const aiAgents = [
+        "GPTBot", "ChatGPT-User", "PerplexityBot", "ClaudeBot", "Claude-Web",
+        "anthropic-ai", "Applebot", "Applebot-Extended", "Google-Extended",
+        "Googlebot", "Meta-ExternalAgent", "cohere-ai", "Diffbot", "Bingbot", "YandexBot"
+      ];
+      for (const agent of aiAgents) {
+        txt += `User-agent: ${agent}\nAllow: /\n\n`;
+      }
+      txt += `Sitemap: ${baseUrl}/sitemap.xml\n`;
+      txt += `RSS: ${baseUrl}/feed.xml\n`;
+      txt += `LLMs-Txt: ${baseUrl}/llms.txt\n`;
+
+      return new Response(txt, {
+        headers: { 'Content-Type': 'text/plain; charset=utf-8', ...corsHeaders },
+      });
+    }
+
+    // Dynamic LLMs.txt (/llms.txt, /llm.txt, /llms)
+    if (url.pathname === '/llms.txt' || url.pathname === '/llm.txt' || url.pathname === '/llms') {
+      const posts = getAllPostsFromStore();
+      const baseUrl = env.APP_URL || url.origin;
+
+      let txt = `# Aluvantis Blog\n\n`;
+      txt += `> Aluvantis korporativ tahlil va raqamli innovatsiyalar portali. CEO Anvar boshchiligida raqamli transformatsiya, IT arxitektura va zamonaviy biznes strategiyalari.\n\n`;
+      txt += `## Asosiy Ma'lumotlar\n`;
+      txt += `- Tashkilot: Aluvantis\n`;
+      txt += `- Asoschi va CEO: Anvar\n`;
+      txt += `- Veb-sayt: ${baseUrl}\n`;
+      txt += `- RSS Tasmasi: ${baseUrl}/feed.xml\n`;
+      txt += `- Sitemap: ${baseUrl}/sitemap.xml\n\n`;
+
+      txt += `## Maqolalar va Ekspert Tahlillari\n\n`;
+      for (const p of posts) {
+        if (p.isDeleted) continue;
+        const postUrl = `${baseUrl}/post/${p.slug}`;
+        txt += `### [${p.title}](${postUrl})\n`;
+        txt += `- **Sana**: ${p.date || p.createdAt}\n`;
+        txt += `- **Muallif**: ${p.author?.name || "Anvar (CEO Aluvantis)"}\n`;
+        txt += `- **Xulosa**: ${p.excerpt || (p.content || "").substring(0, 160)}\n\n`;
+      }
+
+      return new Response(txt, {
+        headers: { 'Content-Type': 'text/plain; charset=utf-8', ...corsHeaders },
+      });
+    }
+
     // Dynamic RSS Feed (/feed.xml, /rss.xml)
     if (url.pathname === '/feed.xml' || url.pathname === '/rss.xml' || url.pathname === '/feed') {
       const posts = getAllPostsFromStore();
