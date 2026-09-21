@@ -327,16 +327,19 @@ export function generateSeoFiles() {
       fs.mkdirSync(dir, { recursive: true });
     }
 
+    const routesJsonContent = JSON.stringify({ version: 1, include: ["/*"], exclude: ["/assets/*", "/favicon.ico", "/logo.png"] }, null, 2);
+
     fs.writeFileSync(path.join(dir, "sitemap.xml"), xml, "utf-8");
     fs.writeFileSync(path.join(dir, "robots.txt"), robotsText, "utf-8");
     fs.writeFileSync(path.join(dir, "feed.xml"), rss, "utf-8");
     fs.writeFileSync(path.join(dir, "rss.xml"), rss, "utf-8");
     fs.writeFileSync(path.join(dir, "llms.txt"), llmsTxt, "utf-8");
     fs.writeFileSync(path.join(dir, "_redirects"), redirectsContent, "utf-8");
+    fs.writeFileSync(path.join(dir, "_routes.json"), routesJsonContent, "utf-8");
     fs.writeFileSync(path.join(dir, "vercel.json"), vercelJsonContent, "utf-8");
     fs.writeFileSync(path.join(dir, ".htaccess"), htaccessContent, "utf-8");
 
-    console.log(`✓ Generated sitemap.xml, robots.txt, feed.xml, rss.xml, llms.txt, _redirects, vercel.json, .htaccess in ${dir}`);
+    console.log(`✓ Generated sitemap.xml, robots.txt, feed.xml, rss.xml, llms.txt, _redirects, _routes.json, vercel.json, .htaccess in ${dir}`);
   }
 }
 
